@@ -16,6 +16,7 @@
             --primary-color: #0b5394;
             --secondary-color: #3d85c6;
             --accent-color: #e67c73;
+            --warning-color: #f1c232;
             --bg-color: #f4f7f6;
             --card-bg: #ffffff;
             --text-main: #333333;
@@ -60,6 +61,29 @@
             margin-top: 0;
         }
 
+        /* ตกแต่ง Pain Points */
+        .pain-point-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .pain-point-card {
+            background-color: #fff9e6;
+            border-top: 4px solid var(--warning-color);
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .pain-point-card h3 {
+            margin-top: 0;
+            color: #b45f06;
+            font-size: 1.1em;
+        }
+
+        /* ตกแต่งตาราง */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -82,6 +106,7 @@
             background-color: #f1f7fc;
         }
 
+        /* ตกแต่งส่วน Highlight */
         .highlight-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -125,9 +150,33 @@
             โมเดลนำร่อง: รพ.ศรีณรงค์ <-> รพ.สังขะ <-> รพ.สุรินทร์</p>
         </div>
 
-        <!-- Section 1: Workflow Diagram -->
+        <!-- Section 1: Pain Points -->
         <div class="card">
-            <h2>1. แผนผังกระบวนการทำงานแบบปิด (Closed-Loop Data Pathway)</h2>
+            <h2>1. ที่มาและปัญหาปัจจุบัน (Pain Points)</h2>
+            <p>โครงการนี้ถูกพัฒนาขึ้นเพื่อแก้ไขปัญหาวิกฤติด้านการจัดการข้อมูลและการดูแลผู้ป่วยระยะกลาง (Intermediate Care) ในระดับจังหวัด ดังนี้:</p>
+            <div class="pain-point-grid">
+                <div class="pain-point-card">
+                    <h3>⚠️ 1. ภาระงานคีย์ข้อมูลซ้ำซ้อน</h3>
+                    <p>บุคลากรต้องบันทึกข้อมูลลง HOSxP, ทะเบียน Refer จังหวัด และ Disability Portal ซ้ำไปมา ทำให้สูญเสียเวลาในการดูแลรักษาผู้ป่วยโดยตรง</p>
+                </div>
+                <div class="pain-point-card">
+                    <h3>⚠️ 2. ผู้ป่วยหลุดระบบ (Lost Golden Period)</h3>
+                    <p>ผู้ป่วยจำนวนมากที่จำหน่ายจาก รพ.ศูนย์/รพ.ทั่วไป เดินทางกลับบ้านทันทีโดยไม่ผ่าน รพ.ชุมชนต้นทาง ทำให้พลาดโอกาสได้รับการฟื้นฟูในช่วง 6 เดือนแรกที่สำคัญที่สุด</p>
+                </div>
+                <div class="pain-point-card">
+                    <h3>⚠️ 3. ข้อมูลสถิติไม่ครบถ้วนและขาดความต่อเนื่อง</h3>
+                    <p>การบันทึกข้อมูลที่ไม่เป็นมาตรฐานเดียวกัน และการเปลี่ยนผู้ดูแลบ่อยครั้ง ทำให้สถิติภาพรวมระดับจังหวัดบิดเบี้ยว ไม่สามารถนำไปวางแผน Service Plan ได้</p>
+                </div>
+                <div class="pain-point-card">
+                    <h3>⚠️ 4. ขาดจุดเชื่อมต่อของทีมสหวิชาชีพ</h3>
+                    <p>ไม่มีศูนย์กลางข้อมูล (Central Dashboard) ที่แจ้งเตือนสถานะผู้ป่วยแบบ Real-time ทำให้ทีมแพทย์ พยาบาล และนักกายภาพบำบัดในพื้นที่ทำงานแบบแยกส่วนกัน</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Workflow Diagram -->
+        <div class="card">
+            <h2>2. แผนผังกระบวนการทำงานแบบปิด (Closed-Loop Data Pathway)</h2>
             <div class="mermaid">
                 graph TD
                     subgraph Community_Hospital [รพ.ชุมชน ต้นทาง]
@@ -158,9 +207,9 @@
             </div>
         </div>
 
-        <!-- Section 2: Data Dictionary -->
+        <!-- Section 3: Data Dictionary -->
         <div class="card">
-            <h2>2. ชุดข้อมูลที่จัดเก็บและประมวลผล (Data Privacy Standards)</h2>
+            <h2>3. ชุดข้อมูลที่จัดเก็บและประมวลผล (Data Privacy Standards)</h2>
             <p>การดึงและวิเคราะห์ข้อมูลทั้งหมดเกิดขึ้น <strong>"ภายในเซิร์ฟเวอร์ของโรงพยาบาล (Local Edge)"</strong> ก่อนส่งชุดข้อมูลเชิงสถิติที่ผ่านการเข้ารหัสไปยังศูนย์ข้อมูลระดับจังหวัด โดยไม่ละเมิดสิทธิผู้ป่วย</p>
             <table>
                 <thead>
@@ -194,13 +243,13 @@
             </table>
         </div>
 
-        <!-- Section 3: Executive Highlights -->
+        <!-- Section 4: Executive Highlights -->
         <div class="card">
-            <h2>3. จุดเด่นเพื่อการพิจารณาอนุมัติ (Executive Highlights)</h2>
+            <h2>4. จุดเด่นเพื่อการพิจารณาอนุมัติ (Executive Highlights)</h2>
             <div class="highlight-grid">
                 <div class="highlight-box security">
                     <h3>🧠 100% On-Premise Local AI</h3>
-                    <p>ระบบ AI Agent ถูกติดตั้งและประมวลผล <strong>ภายในเซิร์ฟเวอร์เครือข่ายกระทรวงสาธารณสุข (MOPH Intranet) เท่านั้น</strong> ไม่มีการส่งข้อมูลผู้ป่วยไปประมวลผลบน Cloud สาธารณะภายนอก (เช่น ChatGPT หรือ Google API) ข้อมูลจึงมีความปลอดภัยสูงสุด 100%</p>
+                    <p>ระบบ AI Agent ถูกติดตั้งและประมวลผล <strong>ภายในเซิร์ฟเวอร์เครือข่ายกระทรวงสาธารณสุข (MOPH Intranet) เท่านั้น</strong> ไม่มีการส่งข้อมูลผู้ป่วยไปประมวลผลบน Cloud สาธารณะภายนอก ข้อมูลจึงมีความปลอดภัยสูงสุด 100%</p>
                 </div>
                 <div class="highlight-box">
                     <h3>🛡️ Zero-Interference & Low Impact</h3>
