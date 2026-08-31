@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IMC Patient Tracking System - Executive Summary</title>
     
-    <!-- นำเข้าฟอนต์ Prompt จาก Google Fonts ให้ตัวหนังสือภาษาไทยอ่านง่ายและดูเป็นทางการ -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <!-- นำเข้า Mermaid.js สำหรับเรนเดอร์ Diagram อัตโนมัติ -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
         mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
@@ -18,6 +15,7 @@
         :root {
             --primary-color: #0b5394;
             --secondary-color: #3d85c6;
+            --accent-color: #e67c73;
             --bg-color: #f4f7f6;
             --card-bg: #ffffff;
             --text-main: #333333;
@@ -62,7 +60,6 @@
             margin-top: 0;
         }
 
-        /* ตกแต่งตาราง */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -85,10 +82,9 @@
             background-color: #f1f7fc;
         }
 
-        /* ตกแต่งส่วน Highlight */
         .highlight-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
@@ -100,9 +96,18 @@
             border-radius: 4px;
         }
 
+        .highlight-box.security {
+            background-color: #fce8e6;
+            border-left: 4px solid var(--accent-color);
+        }
+
         .highlight-box h3 {
             margin-top: 0;
             color: var(--primary-color);
+        }
+
+        .highlight-box.security h3 {
+            color: var(--accent-color);
         }
         
         .mermaid {
@@ -115,38 +120,38 @@
 
     <div class="container">
         <div class="header">
-            <h1>ระบบเชื่อมโยงและติดตามผู้ป่วย IMC อัตโนมัติ</h1>
-            <p><strong>(Automated IMC Patient Tracking & Referral Pathway)</strong><br>
+            <h1>ระบบเชื่อมโยงและติดตามผู้ป่วย IMC อัตโนมัติด้วย Local AI</h1>
+            <p><strong>(Secure On-Premise IMC Patient Tracking System)</strong><br>
             โมเดลนำร่อง: รพ.ศรีณรงค์ <-> รพ.สังขะ <-> รพ.สุรินทร์</p>
         </div>
 
         <!-- Section 1: Workflow Diagram -->
         <div class="card">
-            <h2>1. แผนผังกระบวนการทำงานและการส่งข้อมูล (Data Pathway)</h2>
+            <h2>1. แผนผังกระบวนการทำงานแบบปิด (Closed-Loop Data Pathway)</h2>
             <div class="mermaid">
                 graph TD
                     subgraph Community_Hospital [รพ.ชุมชน ต้นทาง]
                         A(รับผู้ป่วย ER/OPD<br/>อุบัติเหตุ / อ่อนแรง) --> B{ประเมินอาการ}
                         B -- ไม่รุนแรง --> C(รักษาและกลับบ้าน)
                         B -- รุนแรง/ฉุกเฉิน --> D(ทำเรื่อง Refer ส่งต่อ)
-                        D --> E[Local Agent: Spotter Mode]
+                        D --> E[Local Agent: Edge Processing<br/>ประมวลผลคัดกรองใน รพ.]
                     end
 
                     subgraph Node_Center_Hospital [รพ.แม่ข่าย / รพ.ศูนย์]
                         F(รับผู้ป่วย Refer In) --> G{การรักษา IPD}
                         G -- ระหว่างนอน รพ. --> H(ผ่าตัดสมอง/สะโพก หรือ Consult กายภาพ)
-                        H --> I[Local Agent: Early Confirmer]
+                        H --> I[Local Agent: Edge Processing<br/>ประมวลผลดักจับเหตุการณ์]
                         G -- พ้นวิกฤติ --> J(จำหน่าย D/C หรือ Refer Back)
-                        J --> K[Local Agent: Final Confirmer]
+                        J --> K[Local Agent: Edge Processing<br/>ประมวลผลรหัสขั้นสุดท้าย]
                     end
 
-                    subgraph Central_AI_Server [Central AI Node & Dashboard]
-                        E -. ส่งข้อมูลชี้เป้า .-> L((Central Engine))
-                        I -. ส่งสถานะกำลังรักษา .-> L
-                        K -. ส่งรหัสโรค Final Dx .-> L
-                        L --> M{AI Agent Match}
+                    subgraph Central_Secure_Server [Provincial Secure Data Center / สสจ.]
+                        E -. ส่งมอบเฉพาะ Data Payload .-> L((On-Premise AI Engine<br/>เซิร์ฟเวอร์ภายในจังหวัด))
+                        I -. ส่งมอบเฉพาะ Data Payload .-> L
+                        K -. ส่งมอบเฉพาะ Data Payload .-> L
+                        L --> M{Local AI Matching<br/>ไม่มีการเชื่อมต่อ API ภายนอก}
                         M --> N[อัปเดตสถิติลง Dashboard จังหวัด]
-                        M --> O[ส่ง LINE Notification แจ้งพื้นที่]
+                        M --> O[ส่ง LINE Notification แจ้งพื้นที่แบบ Anonymized]
                     end
 
                     D ==>|รถพยาบาลส่งตัว| F
@@ -156,34 +161,34 @@
         <!-- Section 2: Data Dictionary -->
         <div class="card">
             <h2>2. ชุดข้อมูลที่จัดเก็บและประมวลผล (Data Privacy Standards)</h2>
-            <p>ระบบออกแบบภายใต้ข้อกำหนด PDPA โดยไม่ดึงข้อมูลรายละเอียดการพยาบาลหรือบันทึกข้อความที่ละเอียดอ่อน ดึงเฉพาะข้อมูลเชิงสถิติเพื่อบริหารจัดการ Service Plan</p>
+            <p>การดึงและวิเคราะห์ข้อมูลทั้งหมดเกิดขึ้น <strong>"ภายในเซิร์ฟเวอร์ของโรงพยาบาล (Local Edge)"</strong> ก่อนส่งชุดข้อมูลเชิงสถิติที่ผ่านการเข้ารหัสไปยังศูนย์ข้อมูลระดับจังหวัด โดยไม่ละเมิดสิทธิผู้ป่วย</p>
             <table>
                 <thead>
                     <tr>
                         <th>ระยะการทำงาน (Phase)</th>
-                        <th>จุดที่ดำเนินการ</th>
-                        <th>ข้อมูลที่ดึงและส่งไปยังส่วนกลาง (Data Payload)</th>
-                        <th>ประโยชน์ต่อระบบสุขภาพ</th>
+                        <th>กระบวนการ Local AI</th>
+                        <th>ข้อมูลที่ดึงและส่งไปยังส่วนกลาง (Encrypted Payload)</th>
+                        <th>ความปลอดภัย (Security Focus)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td><strong>1. First Contact</strong> (ชี้เป้า)</td>
-                        <td>รพ.ชุมชน</td>
-                        <td>เลขอ้างอิงส่งต่อ, เลขบัตรประชาชน, รหัสโรคเบื้องต้น, รพ.ปลายทาง</td>
-                        <td>คาดการณ์จำนวนผู้ป่วย IMC ล่วงหน้า เพื่อให้ทีมพื้นที่เตรียมความพร้อม</td>
+                        <td>วิเคราะห์ตาราง Refer ภายใน รพ.ชุมชน</td>
+                        <td>เลขอ้างอิงส่งต่อ, เลขบัตรประชาชน (Hashed), รหัสโรคเบื้องต้น</td>
+                        <td>กรองชื่อ-นามสกุล และบันทึกพยาบาลทิ้งตั้งแต่ต้นทาง</td>
                     </tr>
                     <tr>
                         <td><strong>2. Active Treatment</strong> (ยืนยัน)</td>
-                        <td>รพ.ทั่วไป/ศูนย์</td>
-                        <td>เลขบัตรประชาชน, รหัสหัตถการ (ICD-9), วันที่สั่งกายภาพบำบัด</td>
-                        <td>ลดปัญหาข้อมูลล่าช้าจากการสรุปชาร์ทของแพทย์ (Delayed Charting)</td>
+                        <td>ตรวจจับความเคลื่อนไหวจากฐานข้อมูล รพ.ศูนย์</td>
+                        <td>เลขบัตรประชาชน (Hashed), รหัสหัตถการ (ICD-9), วันที่สั่งกายภาพบำบัด</td>
+                        <td>เข้าถึงฐานข้อมูลในโหมด Read-Only เท่านั้น ป้องกันการแก้ไข</td>
                     </tr>
                     <tr>
                         <td><strong>3. Final Discharge</strong> (ส่งกลับ)</td>
-                        <td>รพ.ทั่วไป/ศูนย์</td>
-                        <td>เลขบัตรประชาชน, รหัสโรคขั้นสุดท้าย (ICD-10 IMC 4 กลุ่มโรค), วันที่ D/C</td>
-                        <td>ยืนยันสถิติความถูกต้อง 100% และแจ้งเตือนทีมลงพื้นที่ฟื้นฟูทันที</td>
+                        <td>จับคู่รหัสโรคขั้นสุดท้ายภายในเครือข่าย รพ.</td>
+                        <td>เลขบัตรประชาชน (Hashed), รหัสโรค (ICD-10 IMC), วันที่ D/C</td>
+                        <td>ระบบกลางนำข้อมูลไปประมวลผลต่อใน Intranet ของจังหวัดเท่านั้น</td>
                     </tr>
                 </tbody>
             </table>
@@ -193,17 +198,21 @@
         <div class="card">
             <h2>3. จุดเด่นเพื่อการพิจารณาอนุมัติ (Executive Highlights)</h2>
             <div class="highlight-grid">
+                <div class="highlight-box security">
+                    <h3>🧠 100% On-Premise Local AI</h3>
+                    <p>ระบบ AI Agent ถูกติดตั้งและประมวลผล <strong>ภายในเซิร์ฟเวอร์เครือข่ายกระทรวงสาธารณสุข (MOPH Intranet) เท่านั้น</strong> ไม่มีการส่งข้อมูลผู้ป่วยไปประมวลผลบน Cloud สาธารณะภายนอก (เช่น ChatGPT หรือ Google API) ข้อมูลจึงมีความปลอดภัยสูงสุด 100%</p>
+                </div>
                 <div class="highlight-box">
                     <h3>🛡️ Zero-Interference & Low Impact</h3>
-                    <p>ระบบหลังบ้านทำหน้าที่เพียงอ่านข้อมูล (Read-Only) จากตารางมาตรฐาน วันละ 1 ครั้งในช่วงกลางคืน ไม่ส่งผลกระทบต่อความเร็วของระบบ HOSxP หลักของโรงพยาบาล</p>
+                    <p>ระบบรันแบบเบื้องหลัง (Background Task) วันละ 1 ครั้ง ด้วยสิทธิ์เข้าถึงแบบ <strong>Read-Only ภายใต้คำสั่งจำกัดความเสี่ยง (Safe Query)</strong> ไม่ส่งผลกระทบต่อความเร็วของระบบ HOSxP หลักของโรงพยาบาล</p>
                 </div>
                 <div class="highlight-box">
-                    <h3>🔒 Privacy by Design (PDPA Compliant)</h3>
-                    <p>ข้อมูลที่วิ่งผ่านเครือข่ายใช้เพียง CID และ Refer ID ในการจับคู่ ชื่อ-สกุลเต็มจะไม่ปะปนในฐานข้อมูลกลาง และการแจ้งเตือน LINE จะเข้ารหัสปกปิดตัวตนเสมอ</p>
+                    <h3>🔒 Privacy by Design (PDPA)</h3>
+                    <p>ข้อมูลที่ถูกนำมาจับคู่เป็นเพียงรหัสเชิงสถิติ (CID/Refer ID) ข้อมูลชื่อ-สกุลเต็มจะไม่ปะปนในฐานข้อมูลส่วนกลาง การแจ้งเตือนเพื่อเตรียมลงพื้นที่ฟื้นฟูผู้ป่วยจะถูกเข้ารหัสปกปิดตัวตนเสมอ</p>
                 </div>
                 <div class="highlight-box">
-                    <h3>💡 Cost Efficiency & Workload Reduction</h3>
-                    <p>ใช้ซอฟต์แวร์ Open Source ไม่มีค่าลิขสิทธิ์รายปี ช่วยลดภาระพยาบาล/นักกายภาพฯ ในการคีย์ข้อมูลซ้ำซ้อนในระบบ Disability Portal ลดความผิดพลาดของมนุษย์</p>
+                    <h3>💡 Cost Efficiency</h3>
+                    <p>ใช้คอมพิวเตอร์หรือเซิร์ฟเวอร์เดิมของโรงพยาบาลร่วมกับซอฟต์แวร์ Open Source ไม่มีค่าลิขสิทธิ์รายปี ลดภาระงานซ้ำซ้อนของบุคลากรที่ต้องบันทึกข้อมูลลง Disability Portal ได้อย่างเป็นรูปธรรม</p>
                 </div>
             </div>
         </div>
